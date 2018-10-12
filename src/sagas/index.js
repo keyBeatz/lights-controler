@@ -170,20 +170,6 @@ function* writeValueToCharacteristics({service, characteristic, value,}) {
  * @returns {IterableIterator<*>}
  */
 function* subscribeForNotifications({serviceType, characteristic,}) {
-  /*const response = yield call(fetch, `http://test02.dev.caspiatech.cz/v1/notifications`, {
-    method: 'GET',
-    headers: {
-      'Cache': 'no-cache',
-      'Upgrade': 'websocket',
-      'Connection': 'Upgrade',
-      'Sec-WebSocket-Key': 'daecIhfhHeDfYP4rJivWjQ==',
-      'Sec-WebSocket-Version': 13,
-      'Pragma': 'no-cache',
-      'Cache-Control': 'no-cache',
-    },
-    credentials: 'include',
-  });*/
-
   let services = yield select(store => store.get('state').get('services'));
 
   if (serviceType !== undefined) {
