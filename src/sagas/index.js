@@ -16,6 +16,15 @@ import {
 } from "Actions/AppActions";
 import ws from 'Utils/websockets';
 import {apiUrl} from "Utils/settings";
+import NotificationDispatcher from 'Utils/NotificationDispatcher';
+import {
+  characteristicsSetErrorNotification,
+  characteristicsSetSuccessfullyNotification,
+  loadingServiceCharacteristicsErrorNotification,
+  loggedInSuccessfullyNotification,
+  loginErrorNotification, servicesFetchErrorNotification
+} from "Components/Notification/notifications";
+
 
 /**
  * @param username
@@ -38,10 +47,10 @@ function* login({username, password}) {
   });
 
   if (response.status === 200) {
-    toaster.success('Byli jste úspěšně přihlášení!');
+    NotificationDispatcher.dispatch(loggedInSuccessfullyNotification());
     yield put(loginAction(username));
   } else {
-    toaster.warning('Nesprávné přihlašovací údaje :(');
+    NotificationDispatcher.dispatch(loginErrorNotification());
   }
   yield call(console.log, response);
 }
@@ -57,11 +66,10 @@ function* fetchServices() {
   });
 
   if (response.status !== 200) {
-    toaster.warning('Načítání dat selhalo');
+    NotificationDispatcher.dispatch(servicesFetchErrorNotification());
     return;
   }
   const jsonBody = yield call(() => response.json());
-
 
   let output = {};
   jsonBody.forEach((service) => {
@@ -110,7 +118,7 @@ function* fetchCharacteristicsForServices({serviceType, characteristic,}) {
     });
 
     if (response.status !== 200) {
-      toaster.warning(`Chyba při načítaní charakterstiky služby ${service}`);
+      NotificationDispatcher.dispatch(loadingServiceCharacteristicsErrorNotification({ serviceName: service.name, }));
     }
     const jsonBody = yield call(() => response.json());
 
@@ -158,9 +166,9 @@ function* writeValueToCharacteristics({service, characteristic, value,}) {
   });
 
   if (response.status === 200) {
-    toaster.success(`Úspěšně nastaveno`);
+    NotificationDispatcher.dispatch(characteristicsSetSuccessfullyNotification());
   } else {
-    toaster.success(`Chyba, zkuste to prosím znovu`);
+    NotificationDispatcher.dispatch(characteristicsSetErrorNotification());
   }
 }
 

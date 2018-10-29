@@ -11,6 +11,7 @@ import LoginPage from "Containers/LoginPage";
 import './icons';
 import './style.scss';
 import Footer from "Components/Footer";
+import Notification from "Components/Notification";
 
 
 class App extends React.PureComponent {
@@ -23,6 +24,7 @@ class App extends React.PureComponent {
     const {user,} = this.props;
     return (
       <Pane className={`app-container`}>
+        <Notification />
         {user.get('loggedIn') ? (
           <LightsPage/>
         ) : (
