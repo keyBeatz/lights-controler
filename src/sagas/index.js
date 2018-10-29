@@ -101,7 +101,7 @@ function* fetchCharacteristicsForServices({serviceType, characteristic,}) {
   for (let i = 0; i < services.size; i++) {
     const service = services.get(i);
     const serviceName = service.get('name');
-    const response = yield call(fetch, `http://test02.dev.caspiatech.cz/v1/services/${serviceName}/characteristics/${characteristic}/value`, {
+    const response = yield call(fetch, `${apiUrl}/services/${serviceName}/characteristics/${characteristic}/value`, {
       method: 'GET',
       headers: {
         'Cache': 'no-cache',
@@ -144,7 +144,7 @@ function* writeValueToCharacteristics({service, characteristic, value,}) {
     throw new Error("Parameter value is required");
   }
 
-  const response = yield call(fetch, `http://test02.dev.caspiatech.cz/v1/services/${service}/characteristics/${characteristic}/value`, {
+  const response = yield call(fetch, `${apiUrl}/services/${service}/characteristics/${characteristic}/value`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
@@ -170,20 +170,6 @@ function* writeValueToCharacteristics({service, characteristic, value,}) {
  * @returns {IterableIterator<*>}
  */
 function* subscribeForNotifications({serviceType, characteristic,}) {
-  /*const response = yield call(fetch, `http://test02.dev.caspiatech.cz/v1/notifications`, {
-    method: 'GET',
-    headers: {
-      'Cache': 'no-cache',
-      'Upgrade': 'websocket',
-      'Connection': 'Upgrade',
-      'Sec-WebSocket-Key': 'daecIhfhHeDfYP4rJivWjQ==',
-      'Sec-WebSocket-Version': 13,
-      'Pragma': 'no-cache',
-      'Cache-Control': 'no-cache',
-    },
-    credentials: 'include',
-  });*/
-
   let services = yield select(store => store.get('state').get('services'));
 
   if (serviceType !== undefined) {
